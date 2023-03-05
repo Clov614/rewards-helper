@@ -7,6 +7,7 @@ import (
 	"net/url"
 	"os"
 	"strings"
+	"time"
 )
 
 type Cookie struct {
@@ -34,6 +35,7 @@ func (c *Cookie) initPath() {
 	}
 	defer file.Close()
 	log.Println("请将cookies添加至/cookie/cookies.txt")
+	time.Sleep(time.Second * 5)
 	os.Exit(114514)
 }
 
