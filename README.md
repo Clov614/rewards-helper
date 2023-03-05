@@ -1,4 +1,7 @@
 # 微软积分助手
+
+[![goreleaser](https://github.com/Clov614/Microsoft_Rewards_Helper/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/Clov614/Microsoft_Rewards_Helper/actions/workflows/release.yml)
+
 自动化获取微软积分
 
 ## 功能概述
@@ -22,7 +25,7 @@
 
 #### `start cmd /K MicroSoftRewordsHelper.exe`
 
-### 1. 下载对应平台的可执行文件
+### 1. [下载对应平台的可执行文件](https://github.com/Clov614/Microsoft_Rewards_Helper/releases/)
 
 ### 2. 第一次运行会进行初始化生成配置文件
 
