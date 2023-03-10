@@ -1,6 +1,6 @@
 # 微软积分助手
 
-[![goreleaser](https://github.com/Clov614/Microsoft_Rewards_Helper/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/Clov614/Microsoft_Rewards_Helper/actions/workflows/release.yml)
+[![goreleaser](https://github.com/Clov614/Microsoft_Rewards_Helper/actions/workflows/release.yml/badge.svg)](https://github.com/Clov614/Microsoft_Rewards_Helper/actions/workflows/release.yml)
 
 自动化获取微软积分
 

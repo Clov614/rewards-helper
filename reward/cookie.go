@@ -83,7 +83,9 @@ func (c *Cookie) Handler() {
 		c.initPath()
 	}
 	if c.isEmpty() {
-		log.Fatalln("cookie为空,请配置cookie")
+		log.Println("cookie为空,请配置cookie")
+		time.Sleep(time.Second * 5)
+		os.Exit(400)
 	}
 	c.txt2Cookies()
 }

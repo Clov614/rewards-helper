@@ -115,10 +115,10 @@ func (v *View) Handler(c *Conn) {
 		err = json.Unmarshal([]byte(dailyPointStr[1]), &v.Infov.DailyPoints)
 		patternm, _ := regexp.Compile("\"mobileSearch\":\\[([\\s\\S]*?)]")
 		mobileSearchstr := patternm.FindStringSubmatch(respStr)
-		if len(mobileSearchstr) == 0 {
-			log.Fatalln("长度为0", "json格式化失败(疑似Cookie失效)")
+		// #issue1解决新用户不存在手机分数
+		if len(mobileSearchstr) != 0 {
+			err = json.Unmarshal([]byte(mobileSearchstr[1]), &v.Infov.MobiSearch)
 		}
-		err = json.Unmarshal([]byte(mobileSearchstr[1]), &v.Infov.MobiSearch)
 		pattern, _ := regexp.Compile("\"pcSearch\":\\[([\\s\\S]*?}),\\{")
 		pcSearchstr := pattern.FindStringSubmatch(respStr)
 		if len(pcSearchstr) == 0 {
