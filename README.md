@@ -4,6 +4,10 @@
 
 自动化获取微软积分
 
+## Action版： [microsoft-rewards-helper-action](https://github.com/Clov614/microsoft-rewards-helper-action)
+
+借助工作流的定时任务，实现每日自动刷取积分
+
 ## 功能概述
 
 <details>
