@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/AMySelf/Microsoft/microsoft_rewords/reward"
+	"time"
 
 	"log"
 )
@@ -33,7 +34,7 @@ func main() {
 	// goroutine
 	go manager.AddTask(conn.Get.Handler)
 	go manager.StartTask()
-	go func() {
+	func() {
 		statusPc, statusMb := 0, 0
 		for i := range manager.DoneIndex {
 			fmt.Println("Task: ", i)
@@ -56,6 +57,6 @@ func main() {
 		fmt.Println("今日分数: ", conn.View.Infov.DailyPoints.PointProgress)
 	}()
 
-	for {
-	} // 阻塞防止程序退出
+	// 阻塞更换为执行完毕后休眠5s
+	time.Sleep(time.Second * 5)
 }
