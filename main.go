@@ -24,7 +24,7 @@ func main() {
 	manager := conn.NewManager()
 	params := reward.Params{
 		Conn:   conn,
-		UrlGet: "http://www.bing.com/search",
+		UrlGet: "https://www.bing.com/search",
 		//UaPc:   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.63",
 		UaPc: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
 		UaMb: "Mozilla/5.0 (Linux; Android 11; PEAT00) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Mobile Safari/537.36 EdgA/110.0.1587.54",

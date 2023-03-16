@@ -1,9 +1,10 @@
 package reward
 
 import (
-	"github.com/levigross/grequests"
+	"fmt"
 	"log"
 	"math/rand"
+	"net/http"
 	"net/url"
 	"strconv"
 	"time"
@@ -18,10 +19,10 @@ type Get struct {
 	Url  UrlGet
 	Info Infog
 	//ProxyUrl *url.URL
-	//client   *http.Client
-	UApc UaPc
-	UAmb UaMb
-	RO   grequests.RequestOptions
+	client *http.Client
+	UApc   UaPc
+	UAmb   UaMb
+	//RO   grequests.RequestOptions
 }
 
 // 请求后返回的信息
@@ -32,7 +33,7 @@ type Infog struct {
 }
 
 // 发起请求 _type string: UA头的类型 (pc mb)表示电脑或手机
-func (g Get) do(c *Conn, _type string) *grequests.Response {
+func (g Get) do(c *Conn, _type string) *http.Response {
 	// 判断是否开启代理
 	if c.Conf.ProxyOn {
 		if c.Conf.Proxy == "" {
@@ -42,15 +43,13 @@ func (g Get) do(c *Conn, _type string) *grequests.Response {
 		if err != nil {
 			panic(err)
 		}
-		g.RO = grequests.RequestOptions{
-			Proxies: map[string]*url.URL{proxyURL.Scheme: proxyURL},
-			Cookies: c.Cookie.Cookies,
+		g.client = &http.Client{
+			Transport: &http.Transport{
+				Proxy: http.ProxyURL(proxyURL),
+			},
 		}
-
 	} else {
-		g.RO = grequests.RequestOptions{
-			Cookies: c.Cookie.Cookies,
-		}
+		g.client = &http.Client{}
 	}
 	// 组合搜索url
 	if len(c.Conf.KeyWords) == 0 {
@@ -59,32 +58,35 @@ func (g Get) do(c *Conn, _type string) *grequests.Response {
 	rand.Seed(time.Now().Unix()) // 设置随机数种子
 	keyword := c.Conf.KeyWords[rand.Intn(len(c.Conf.KeyWords))] + strconv.Itoa(rand.Intn(10000))
 	url := string(g.Url) + "?q=" + url.QueryEscape(keyword)
+	fmt.Println(url)
 
-	//// new req
-	//req, err := http.NewRequest("GET", url, nil)
-	//if err != nil {
-	//	log.Fatalln(err)
-	//}
-	// 设置UA头
-	//if _type == "pc" {
-	//	req.Header.Set("User-Agent", string(g.UApc))
-	//} else {
-	//	req.Header.Set("User-Agent", string(g.UAmb))
-	//}
-	if _type == "mb" {
-		g.RO.UserAgent = string(g.UAmb)
-	}
-
-	// 向req添加Cookies
-	//for _, v := range c.Cookie.Cookies {
-	//	req.AddCookie(v)
-	//}
-	// do
-	//resp, err := g.client.Do(req)
-	resp, err := grequests.Get(url, &g.RO)
+	// new req
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		log.Fatalln(err)
 	}
+	//设置UA头
+	if _type == "pc" {
+		req.Header.Set("User-Agent", string(g.UApc))
+	} else {
+		req.Header.Set("User-Agent", string(g.UAmb))
+	}
+	//if _type == "mb" {
+	//	g.RO.UserAgent = string(g.UAmb)
+	//} else {
+	//	g.RO.UserAgent = string(g.UApc)
+	//}
+
+	//向req添加Cookies
+	for _, v := range c.Cookie.Cookies {
+		req.AddCookie(v)
+	}
+	// do
+	resp, err := g.client.Do(req)
+	//resp, err := grequests.Get(url, &g.RO)
+	//if err != nil {
+	//	log.Fatalln(err)
+	//}
 	return resp
 }
 
@@ -94,7 +96,11 @@ func (g *Get) Handler(c *Conn, searchUrl UrlGet, UApc UaPc, UAmb UaMb, _type Typ
 	g.UApc = UApc
 	g.UAmb = UAmb
 	resp := g.do(c, string(_type))
-	defer resp.Close()
+	// 测试使用
+	//bResp, _ := ioutil.ReadAll(resp.Body)
+	//fmt.Println(string(bResp))
+	//defer resp.Close()
+	defer resp.Body.Close()
 	if resp.StatusCode == 200 {
 		log.Println("<"+_type+"> ", "200 OK")
 		log.Println("当前分数:", c.View.Infov.AvailablePoints)
