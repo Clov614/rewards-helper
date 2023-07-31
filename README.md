@@ -1,12 +1,12 @@
 # 微软积分助手
 
-[![goreleaser](https://github.com/Clov614/Microsoft_Rewards_Helper/actions/workflows/release.yml/badge.svg)](https://github.com/Clov614/Microsoft_Rewards_Helper/actions/workflows/release.yml)
+[![goreleaser](https://github.com/Clov614/rewards-helper/actions/workflows/release.yml/badge.svg?branch=main&event=release)](https://github.com/Clov614/rewards-helper/actions/workflows/release.yml)
 
 自动化获取微软积分
 
-## Action版： [microsoft-rewards-helper-action](https://github.com/Clov614/microsoft-rewards-helper-action)
+## ~~Action版(outdated)： [microsoft-rewards-helper-action](https://github.com/Clov614/microsoft-rewards-helper-action)~~
 
-借助工作流的定时任务，实现每日自动刷取积分
+~~借助工作流的定时任务，实现每日自动刷取积分~~
 
 ## 功能概述
 
