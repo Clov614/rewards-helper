@@ -9,14 +9,16 @@ type Conn struct {
 }
 
 // Conn的构造函数
-func New(ViewUrl string) *Conn {
+func New(ViewUrl string, web *WebUI) *Conn {
 	var conn = new(Conn)
 	// 初始化配置处理器
 	conn.Conf = new(Conf) // 注意给每个指针地址分配内存空间
 	conn.Conf.Handler()
+	web.Conf = conn.Conf // web获取到初始化后conf的地址
+	// TODO 处理cookies同步问题
 	// Cookie处理器
 	conn.Cookie = new(Cookie) // 注意给每个指针地址分配内存空间
-	conn.Cookie.Handler()
+	conn.Cookie.Handler()     // 此处读取cookies
 	// View处理器
 	conn.View = new(View) // 注意给每个指针地址分配内存空间
 	conn.View = &View{

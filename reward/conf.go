@@ -6,21 +6,27 @@ import (
 	"os"
 )
 
+// TODO webUi的数据结构
 type Conf struct {
-	ProxyOn  bool     `yaml:"proxy_on"`
-	Proxy    string   `yaml:"proxy"`
-	KeyWords []string `yaml:"key_words"`
+	SearchUrl string   `yaml:"search_url"`
+	cookies   string   `yaml:"cookies,omitempty"`
+	ProxyOn   bool     `yaml:"proxy_on"`
+	Proxy     string   `yaml:"proxy"`
+	KeyWords  []string `yaml:"key_words"`
 }
 
 var (
-	InfoHelp = "# 配置文件\n# proxy_on 是否开启代理模式 （true or false)\n# proxy 代理地址 \n# key_words 发起请求的关键词\n"
+	InfoHelp = "# 配置文件\n# search_url 自动搜索url 默认为 https://cn.bing.com/search\n# proxy_on 是否开启代理模式 （true or false)\n# proxy 代理地址 \n# key_words 发起请求的关键词\n"
 	// 默认配置
 	DefaultConf = Conf{
-		ProxyOn:  false,
-		Proxy:    "http://127.0.0.1:7890",
-		KeyWords: []string{"AIGC", "GoLang", "bingNew", "gRPC", "Google", "孤独摇滚", "lovelive", "bilibili", "柚子社"},
+		SearchUrl: "https://cn.bing.com/search",
+		ProxyOn:   false,
+		Proxy:     "http://127.0.0.1:7890",
+		KeyWords:  []string{"AIGC", "GoLang", "bingNew", "gRPC", "Google", "孤独摇滚", "lovelive", "bilibili", "柚子社"},
 	}
 )
+
+// TODO 初始化webUi html
 
 // 判断conf是否存在
 func (c *Conf) IsExist() bool {
