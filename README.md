@@ -1,6 +1,6 @@
 # 微软积分助手
 
-[![goreleaser](https://github.com/Clov614/rewards-helper/actions/workflows/release.yml/badge.svg?branch=main&event=release)](https://github.com/Clov614/rewards-helper/actions/workflows/release.yml)
+[![goreleaser](https://github.com/Clov614/rewards-helper/actions/workflows/release.yml/badge.svg)](https://github.com/Clov614/rewards-helper/actions/workflows/release.yml)
 
 自动化获取微软积分
 
@@ -27,9 +27,13 @@
 ## 开始使用
 > windows平台 建议使用run.bat启动
 
-#### `start cmd /K MicroSoftRewordsHelper.exe`
+#### `start cmd /K rewards-helper.exe`
 
-### 1. [下载对应平台的可执行文件](https://github.com/Clov614/Microsoft_Rewards_Helper/releases/)
+文本文件写入 `start cmd /K rewards-helper.exe` 后，改后缀.txt为.bat
+
+### 1. [下载对应平台的可执行文件](https://github.com/Clov614/rewards-helper/releases/)
+
+> win10/11平台下载**rewards-helper_windows_amd64**
 
 ### 2. 第一次运行会进行初始化生成配置文件
 
@@ -77,3 +81,8 @@ key_words:
     - 关键字2
     - 关键字3
 ```
+
+### TODO
+
+- [ ] 一个简易的webui
+- [ ] 半自动更新cookie
