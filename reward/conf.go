@@ -18,7 +18,7 @@ var (
 	DefaultConf = Conf{
 		ProxyOn:  false,
 		Proxy:    "http://127.0.0.1:7890",
-		KeyWords: []string{"a", "AB", "bingNew", "iaimi", "爱美", "孤独摇滚", "b站", "bilibili", "大佐de苦de手", "柚子社"},
+		KeyWords: []string{"AIGC", "GoLang", "bingNew", "gRPC", "Google", "孤独摇滚", "lovelive", "bilibili", "柚子社"},
 	}
 )
 
