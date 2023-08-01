@@ -6,13 +6,12 @@ import (
 	"os"
 )
 
-// TODO webUi的数据结构
 type Conf struct {
-	SearchUrl string   `yaml:"search_url"`
-	cookies   string   `yaml:"cookies,omitempty"`
-	ProxyOn   bool     `yaml:"proxy_on"`
-	Proxy     string   `yaml:"proxy"`
-	KeyWords  []string `yaml:"key_words"`
+	SearchUrl string   `yaml:"search_url" json:"search_url"`
+	cookies   string   `yaml:"cookies,omitempty" json:"cookies"`
+	ProxyOn   bool     `yaml:"proxy_on" json:"proxy_on"`
+	Proxy     string   `yaml:"proxy" json:"proxy"`
+	KeyWords  []string `yaml:"key_words" json:"key_words"`
 }
 
 var (
@@ -61,6 +60,33 @@ func (c *Conf) ReadConf() error {
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+// 写入配置
+func (c *Conf) WriteConf() error {
+	f, err := os.OpenFile("./conf/conf.yaml", os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0777)
+	defer func(f *os.File) {
+		err := f.Close()
+		if err != nil {
+			log.Fatalln("close conf.yaml error: ", err)
+		}
+	}(f)
+	if err != nil {
+		return err
+	}
+	marshal, err := yaml.Marshal(&c)
+	if err != nil {
+		return err
+	}
+	n, err := f.Write([]byte(InfoHelp))
+	log.Println("write info: ", n)
+
+	n, err = f.Write(marshal)
+	if err != nil {
+		return err
+	}
+	log.Println("write conf: ", n)
 	return nil
 }
 

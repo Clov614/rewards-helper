@@ -4,17 +4,27 @@ import (
 	"fmt"
 	"github.com/Clov614/rewards-helper/reward"
 	"log"
+	"sync"
 	"time"
 )
 
 func main() {
+
+	var wg sync.WaitGroup
+
 	ui := &reward.WebUI{}
 	ui.StartWebUI()
 	ViewUrl := "https://rewards.bing.com/"
 	conn := reward.New(ViewUrl, ui)
 	conn.View.Handler(conn)
+	// 传递启动函数
+	ui.SetStart(func() {
+		start(conn)
+	})
 	// TODO web服务
-	start(conn)
+	wg.Add(1)
+	go ui.ServiceWebUI(&wg)
+	wg.Wait()
 }
 
 func start(conn *reward.Conn) {
