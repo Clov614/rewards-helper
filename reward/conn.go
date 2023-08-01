@@ -19,6 +19,7 @@ func New(ViewUrl string, web *WebUI) *Conn {
 	// Cookie处理器
 	conn.Cookie = new(Cookie) // 注意给每个指针地址分配内存空间
 	conn.Cookie.Handler()     // 此处读取cookies
+	conn.Conf.Cookies = conn.Cookie.cookieStr
 	// View处理器
 	conn.View = new(View) // 注意给每个指针地址分配内存空间
 	conn.View = &View{

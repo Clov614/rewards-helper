@@ -16,9 +16,11 @@ type Cookie struct {
 	cookieL   []string
 }
 
+const CookiesPATH = "./cookie/cookies.txt"
+
 // 判断cookies.txt是否存在
 func (c *Cookie) isExist() bool {
-	if !PathExists("./cookie/cookies.txt") {
+	if !PathExists(CookiesPATH) {
 		return false
 	}
 	return true
@@ -29,12 +31,12 @@ func (c *Cookie) initPath() {
 	if err != nil {
 		log.Fatalln("创建cookie目录失败:", err)
 	}
-	file, err := os.OpenFile("./cookie/cookies.txt", os.O_CREATE|os.O_RDWR, 0777)
+	file, err := os.OpenFile(CookiesPATH, os.O_CREATE|os.O_RDWR, 0777)
 	if err != nil {
 		log.Fatalln("创建cookie.txt失败:", err)
 	}
 	defer file.Close()
-	log.Println("请将cookies添加至/cookie/cookies.txt")
+	log.Println("请将cookies添加至 " + CookiesPATH)
 	time.Sleep(time.Second * 5)
 	os.Exit(114514)
 }
@@ -49,6 +51,10 @@ func (c *Cookie) txt2Cookies() {
 
 // cookie切片规则
 func ownSplit(preStr string, pattern string) (preL []string) {
+	// 添加cookie错误处理
+	if !strings.Contains(preStr, pattern) {
+		log.Fatalln("cookie格式错误")
+	}
 	firstend := -1
 	for i, v := range preStr {
 		if string(v) == pattern {
@@ -64,7 +70,7 @@ func ownSplit(preStr string, pattern string) (preL []string) {
 
 func (c *Cookie) isEmpty() bool {
 	// Cookies.txt to Cookies
-	f, _ := os.OpenFile("./cookie/cookies.txt", os.O_RDWR, 0777)
+	f, _ := os.OpenFile(CookiesPATH, os.O_RDWR, 0777)
 	cookieB, _ := ioutil.ReadAll(f)
 	cookieS := strings.TrimSpace(string(cookieB))
 	c.cookieStr = cookieS
@@ -76,6 +82,22 @@ func (c *Cookie) isEmpty() bool {
 		return true
 	}
 	return false
+}
+
+// 更新cookies.txt
+func (c *Cookie) UpdateCookies(cookies string) {
+	c.cookieStr = cookies
+	f, err := os.OpenFile(CookiesPATH, os.O_TRUNC|os.O_RDWR, 0777)
+	if err != nil {
+		log.Println("Open cookies fail ", err)
+	}
+	defer f.Close()
+	n, err := f.Write([]byte(c.cookieStr))
+	if err != nil {
+		return
+	}
+	log.Println("cookies write: ", n)
+	c.Handler() // 将str_cookie 转为 http.Cookies
 }
 
 func (c *Cookie) Handler() {

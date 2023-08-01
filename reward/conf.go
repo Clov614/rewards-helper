@@ -7,11 +7,11 @@ import (
 )
 
 type Conf struct {
-	SearchUrl string   `yaml:"search_url" json:"search_url"`
-	cookies   string   `yaml:"cookies,omitempty" json:"cookies"`
-	ProxyOn   bool     `yaml:"proxy_on" json:"proxy_on"`
-	Proxy     string   `yaml:"proxy" json:"proxy"`
-	KeyWords  []string `yaml:"key_words" json:"key_words"`
+	SearchUrl string   `yaml:"search_url" json:"search_url" :"search_url"`
+	Cookies   string   `yaml:"cookies,omitempty" json:"cookies" :"cookies"`
+	ProxyOn   bool     `yaml:"proxy_on" json:"proxy_on" :"proxy_on"`
+	Proxy     string   `yaml:"proxy" json:"proxy" :"proxy"`
+	KeyWords  []string `yaml:"key_words" json:"key_words" :"key_words"`
 }
 
 var (

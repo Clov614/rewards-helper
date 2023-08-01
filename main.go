@@ -13,22 +13,34 @@ func main() {
 	var wg sync.WaitGroup
 
 	ui := &reward.WebUI{}
-	ui.StartWebUI()
 	ViewUrl := "https://rewards.bing.com/"
 	conn := reward.New(ViewUrl, ui)
-	conn.View.Handler(conn)
+	//if os.Args[1] == "webui" {
+	//	ui.StartWebUI(conn)
+	//	// 传递启动函数
+	//	ui.SetStart(func() {
+	//		start(conn)
+	//	})
+	//	// TODO web服务
+	//	wg.Add(1)
+	//	go ui.ServiceWebUI(&wg)
+	//	wg.Wait()
+	//} else {
+	//	start(conn)
+	//}
+	// 测试使用
+	ui.StartWebUI(conn, &wg)
 	// 传递启动函数
 	ui.SetStart(func() {
 		start(conn)
 	})
-	// TODO web服务
 	wg.Add(1)
 	go ui.ServiceWebUI(&wg)
 	wg.Wait()
 }
 
 func start(conn *reward.Conn) {
-
+	conn.View.Handler(conn)
 	if conn.Conf.ProxyOn {
 		fmt.Println("[Info]当前处于代理模式!!!")
 	}
