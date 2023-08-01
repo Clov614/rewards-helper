@@ -3,3 +3,5 @@ dist/
 /cookie
 /conf
 webui/
+run.bat
+run-web.bat

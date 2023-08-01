@@ -51,6 +51,7 @@ func (w WebUI) StartWebUI(c *Conn, wg *sync.WaitGroup) {
 }
 
 func (w *WebUI) ServiceWebUI(wg *sync.WaitGroup) {
+	wg.Add(1)
 	defer wg.Done()
 	// Initialize Gin router
 	r := gin.Default()

@@ -3,40 +3,42 @@ package main
 import (
 	"fmt"
 	"github.com/Clov614/rewards-helper/reward"
+	"github.com/Clov614/rewards-helper/reward/cmd"
 	"log"
+	"os"
 	"sync"
 	"time"
 )
 
 func main() {
-
+	cmd.InitrunBat()
 	var wg sync.WaitGroup
 
 	ui := &reward.WebUI{}
 	ViewUrl := "https://rewards.bing.com/"
 	conn := reward.New(ViewUrl, ui)
-	//if os.Args[1] == "webui" {
-	//	ui.StartWebUI(conn)
-	//	// 传递启动函数
-	//	ui.SetStart(func() {
-	//		start(conn)
-	//	})
-	//	// TODO web服务
-	//	wg.Add(1)
-	//	go ui.ServiceWebUI(&wg)
-	//	wg.Wait()
-	//} else {
-	//	start(conn)
-	//}
-	// 测试使用
-	ui.StartWebUI(conn, &wg)
-	// 传递启动函数
-	ui.SetStart(func() {
+	if len(os.Args) <= 1 {
 		start(conn)
-	})
-	wg.Add(1)
-	go ui.ServiceWebUI(&wg)
-	wg.Wait()
+	} else if os.Args[1] == "webui" {
+		ui.StartWebUI(conn, &wg)
+		// 传递启动函数
+		ui.SetStart(func() {
+			start(conn)
+		})
+		// TODO web服务
+		wg.Add(1)
+		go ui.ServiceWebUI(&wg)
+		wg.Wait()
+	}
+
+	//// 测试使用
+	//ui.StartWebUI(conn, &wg)
+	//// 传递启动函数
+	//ui.SetStart(func() {
+	//	start(conn)
+	//})
+	//go ui.ServiceWebUI(&wg)
+	//wg.Wait()
 }
 
 func start(conn *reward.Conn) {

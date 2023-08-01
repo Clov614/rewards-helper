@@ -7,7 +7,6 @@ import (
 	"net/url"
 	"os"
 	"strings"
-	"time"
 )
 
 type Cookie struct {
@@ -37,14 +36,15 @@ func (c *Cookie) initPath() {
 	}
 	defer file.Close()
 	log.Println("请将cookies添加至 " + CookiesPATH)
-	time.Sleep(time.Second * 5)
-	os.Exit(114514)
 }
 
 func (c *Cookie) txt2Cookies() {
-
 	for _, v := range c.cookieL {
 		tmpL := ownSplit(v, "=")
+		if tmpL == nil {
+			log.Println("[Warn]cookies为空")
+			continue
+		}
 		c.Cookies = append(c.Cookies, &(http.Cookie{Name: url.QueryEscape(tmpL[0]), Value: url.QueryEscape(tmpL[1])}))
 	}
 }
@@ -53,7 +53,8 @@ func (c *Cookie) txt2Cookies() {
 func ownSplit(preStr string, pattern string) (preL []string) {
 	// 添加cookie错误处理
 	if !strings.Contains(preStr, pattern) {
-		log.Fatalln("cookie格式错误")
+		log.Println("cookie格式错误")
+		return nil
 	}
 	firstend := -1
 	for i, v := range preStr {
@@ -106,8 +107,8 @@ func (c *Cookie) Handler() {
 	}
 	if c.isEmpty() {
 		log.Println("cookie为空,请配置cookie")
-		time.Sleep(time.Second * 5)
-		os.Exit(400)
+	} else {
+		c.txt2Cookies()
 	}
-	c.txt2Cookies()
+
 }

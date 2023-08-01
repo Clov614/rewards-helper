@@ -37,7 +37,7 @@ const HtmlTemplate = `<!DOCTYPE html>
 
                     <el-form-item label="Cookie">
                         <el-input type="textarea" :rows="5" placeholder="键入cookies"
-                            v-model="settings.cookies"></el-input>
+                            v-model="settings.cookies" @blur="saveSettings"></el-input>
                     </el-form-item>
 
                     <el-button @click="saveSettings" type="primary">Save</el-button>
