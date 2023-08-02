@@ -79,7 +79,7 @@ func (m *Manager) StartTask() {
 	// 执行任务
 	i := 0
 	for task := range m.Trans {
-		time.Sleep(time.Second)
+		time.Sleep(time.Second * 2)
 		m.ExecTask(task)
 		m.DoneIndex <- i
 		i += 1
