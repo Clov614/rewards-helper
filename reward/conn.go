@@ -1,11 +1,13 @@
 package reward
 
 type Conn struct {
-	Conf    *Conf   // 配置相关
-	Get     Get     // 获取分数
-	View    *View   // 查询分数
-	Cookie  *Cookie // cookie相关
-	manager Manager // 任务管理器
+	Conf     *Conf    // 配置相关
+	Get      Get      // 获取分数
+	View     *View    // 查询分数
+	Cookie   *Cookie  // cookie相关
+	manager  *Manager // 任务管理器
+	PrePoint *int     // 上一个请求的时间
+	NF       *int     // 失败次数
 }
 
 // Conn的构造函数
@@ -25,6 +27,11 @@ func New(ViewUrl string, web *WebUI) *Conn {
 	conn.View = &View{
 		Url: ViewUrl,
 	}
+	// 初始化任务管理器
+	conn.manager = new(Manager)
+	// 初始化获取积分失败跳过相关
+	conn.PrePoint = new(int)
+	conn.NF = new(int)
 	return conn
 }
 
@@ -33,5 +40,6 @@ func (c *Conn) NewManager() *Manager {
 	m := c.manager
 	m.Trans = make(chan *Task, 2)
 	m.DoneIndex = make(chan int)
-	return &m
+	m.StopSend = make(chan bool, 10)
+	return m
 }

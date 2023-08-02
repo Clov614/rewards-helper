@@ -101,6 +101,19 @@ func (g *Get) Handler(c *Conn, searchUrl UrlGet, UApc UaPc, UAmb UaMb, _type Typ
 	//fmt.Println(string(bResp))
 	//defer resp.Close()
 	defer resp.Body.Close()
+	// 刷取积分错误相关
+	if *c.NF >= 5 {
+		// 错误信息打印
+		log.Println("[Error]获取积分失败")
+		// 停止刷分
+		c.manager.StopSend <- true
+	}
+	if c.View.Infov.AvailablePoints == *c.PrePoint {
+		*c.NF += 1
+	} else {
+		*c.NF = 0
+	}
+	*c.PrePoint = c.View.Infov.AvailablePoints
 	if resp.StatusCode == 200 {
 		log.Println("<"+_type+"> ", "200 OK")
 		log.Println("当前分数:", c.View.Infov.AvailablePoints)
