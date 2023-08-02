@@ -2,6 +2,7 @@ package reward
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -42,6 +43,10 @@ type PcSearch struct {
 	PointProgress int `json:"pointProgress"`
 }
 
+const (
+	JSONFAIL = "长度为0 json格式化失败(疑似Cookie失效)"
+)
+
 func (v *View) doGet(c *Conn) *http.Response {
 	// 开启代理模式
 	if c.Conf.ProxyOn {
@@ -79,7 +84,7 @@ func (v *View) doGet(c *Conn) *http.Response {
 	return resp
 }
 
-func (v *View) Handler(c *Conn) {
+func (v *View) Handler(c *Conn) error {
 	v.Infov = new(Infov)
 	resp := v.doGet(c)
 	defer resp.Body.Close()
@@ -98,11 +103,11 @@ func (v *View) Handler(c *Conn) {
 		pattern1, _ := regexp.Compile("\"availablePoints\":([\\d]*),")
 		targetMark := pattern1.FindStringSubmatch(respStr)
 		if len(targetMark) == 0 {
-			log.Fatalln("长度为0", "json格式化失败(疑似Cookie失效)")
+			return fmt.Errorf(JSONFAIL)
 		}
 		point, err := strconv.Atoi(targetMark[1])
 		if err != nil {
-			log.Fatalln(err, "json格式化失败(疑似Cookie失效)")
+			return fmt.Errorf(JSONFAIL)
 		}
 
 		v.Infov.AvailablePoints = point
@@ -110,7 +115,7 @@ func (v *View) Handler(c *Conn) {
 		pattern2, _ := regexp.Compile("\"dailyPoint\":\\[([\\s\\S]*?)]")
 		dailyPointStr := pattern2.FindStringSubmatch(respStr)
 		if len(dailyPointStr) == 0 {
-			log.Fatalln("长度为0", "json格式化失败(疑似Cookie失效)")
+			return fmt.Errorf(JSONFAIL)
 		}
 		err = json.Unmarshal([]byte(dailyPointStr[1]), &v.Infov.DailyPoints)
 		patternm, _ := regexp.Compile("\"mobileSearch\":\\[([\\s\\S]*?)]")
@@ -122,12 +127,13 @@ func (v *View) Handler(c *Conn) {
 		pattern, _ := regexp.Compile("\"pcSearch\":\\[([\\s\\S]*?}),\\{")
 		pcSearchstr := pattern.FindStringSubmatch(respStr)
 		if len(pcSearchstr) == 0 {
-			log.Fatalln("长度为0", "json格式化失败(疑似Cookie失效)")
+			return fmt.Errorf(JSONFAIL)
 		}
 		err = json.Unmarshal([]byte(pcSearchstr[1]), &v.Infov.PcSearch)
 		if err != nil {
-			log.Fatalln(err, "json格式化失败(疑似Cookie失效)")
+			return fmt.Errorf(JSONFAIL)
 		}
 	}
 
+	return nil
 }

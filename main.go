@@ -42,7 +42,10 @@ func main() {
 }
 
 func start(conn *reward.Conn) {
-	conn.View.Handler(conn)
+	err := conn.View.Handler(conn)
+	if err != nil {
+		log.Fatalln(err)
+	}
 	if conn.Conf.ProxyOn {
 		fmt.Println("[Info]当前处于代理模式!!!")
 	}
