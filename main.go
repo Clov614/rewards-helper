@@ -10,11 +10,14 @@ import (
 	"time"
 )
 
+var (
+	ui = &reward.WebUI{}
+)
+
 func main() {
 	cmd.InitrunBat()
 	var wg sync.WaitGroup
 
-	ui := &reward.WebUI{}
 	ViewUrl := "https://rewards.bing.com/"
 	conn := reward.New(ViewUrl, ui)
 	if len(os.Args) <= 1 {
@@ -73,6 +76,11 @@ func start(conn *reward.Conn) {
 		for i := range manager.DoneIndex {
 			fmt.Println("Task: ", i)
 			conn.View.Handler(conn)
+			// 拼接显示信息
+			dp := conn.View.Infov.DailyPoints
+			viewinfo := fmt.Sprintf("%d/%d", dp.PointProgress, dp.PointProgressMax)
+			ui.ViewInfo = &viewinfo
+			// 命令行相关输出
 			pcSearch := conn.View.Infov.PcSearch
 			mobiSearch := conn.View.Infov.MobiSearch
 			if statusPc == 0 && pcSearch.PointProgress == pcSearch.PointMax {

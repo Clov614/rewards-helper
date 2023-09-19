@@ -1,10 +1,12 @@
-module github.com/Clov614/rewards-helper
+module rewards-helper
 
-go 1.18
+go 1.21
 
 require (
+	github.com/Clov614/rewards-helper v1.0.10
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.9.1
+	github.com/gorilla/websocket v1.5.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 

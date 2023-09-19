@@ -5,6 +5,8 @@ import (
 	"github.com/Clov614/rewards-helper/reward/html"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
+	"html/template"
 	"log"
 	"net/http"
 	"os/exec"
@@ -13,9 +15,10 @@ import (
 )
 
 type WebUI struct {
-	path  string
-	Conf  *Conf // 配置相关
-	start StartFunc
+	path     string
+	Conf     *Conf // 配置相关
+	start    StartFunc
+	ViewInfo *string // 分数输出
 }
 
 type StartFunc func()
@@ -58,7 +61,6 @@ func (w *WebUI) ServiceWebUI(wg *sync.WaitGroup) {
 
 	// 使用CORS中间件处理跨域请求
 	r.Use(cors.Default())
-
 	conf = w.Conf
 	// Define an endpoint to handle settings retrieval
 	r.GET("/settings", getConfHandler)
@@ -112,22 +114,55 @@ func (w *WebUI) SetStart(startFunc StartFunc) {
 	w.start = startFunc
 }
 
-func (w *WebUI) StartWebPage(wg *sync.WaitGroup) {
+// 更新websorcket
+var upgrader = websocket.Upgrader{}
+
+type TemplateData struct {
+	Host string
+	Data []string
+}
+
+func (wu *WebUI) StartWebPage(wg *sync.WaitGroup) {
 	wg.Add(1)
 	defer wg.Done()
 	// 设置HTTP处理函数
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		// 读取HTML文件内容
-		htmlData := []byte(html.HtmlTemplate)
-
+		tmpl, err := template.New("index").Parse(html.HtmlTemplate)
+		if err != nil {
+			http.Error(w, "Error processing template", http.StatusInternalServerError)
+			return
+		}
 		// 设置Content-Type为text/html
 		w.Header().Set("Content-Type", "text/html")
 		// 将HTML文件内容写入ResponseWriter
-		_, err := w.Write(htmlData)
+		// 组装模板数据
+
+		// 渲染模板并将结果写入ResponseWriter
+		err = tmpl.Execute(w, r.Host)
 		if err != nil {
-			log.Fatalln("StartWebPage err:", err)
+			http.Error(w, "Error rendering template", http.StatusInternalServerError)
+			return
 		}
 
+	})
+
+	http.HandleFunc("/output", func(w http.ResponseWriter, r *http.Request) {
+		conn, err := upgrader.Upgrade(w, r, nil)
+		if err != nil {
+			fmt.Println("Error upgrading connection:", err)
+			return
+		}
+		defer conn.Close()
+
+		for {
+			// 将数据发送给客户端
+			err := conn.WriteMessage(websocket.TextMessage, []byte(*wu.ViewInfo))
+			if err != nil {
+				fmt.Println("Error sending data:", err)
+				return
+			}
+		}
 	})
 
 	// 启动HTTP服务器并监听指定端口

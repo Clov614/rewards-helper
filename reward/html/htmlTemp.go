@@ -44,6 +44,15 @@ const HtmlTemplate = `<!DOCTYPE html>
                     <el-button @click="startGetPoints" type="primary">开始</el-button>
                 </el-form>
             </el-main>
+            <el-header>
+                <h3>output</h3>
+            </el-header>
+<!--            <ul>-->
+<!--                {{range .Data}}-->
+<!--                <li>{{.}}</li>-->
+<!--                {{end}}-->
+<!--            </ul>-->
+            刷分进度: <span id="process">{{.}}</span>
         </el-container>
     </div>
 
@@ -52,7 +61,28 @@ const HtmlTemplate = `<!DOCTYPE html>
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <!-- import axios -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<!--    <script>-->
+<!--        var socket = new WebSocket("ws://{{.Host}}/getInfo");-->
 
+<!--        socket.onmessage = function(event) {-->
+<!--            var newData = JSON.parse(event.data);-->
+<!--            var list = document.querySelector("ul");-->
+<!--            list.innerHTML = "";-->
+
+<!--            for (var i = 0; i < newData.length; i++) {-->
+<!--                var li = document.createElement("li");-->
+<!--                li.textContent = newData[i];-->
+<!--                list.appendChild(li);-->
+<!--            }-->
+<!--        };-->
+<!--    </script>-->
+    <script>
+        var socket = new WebSocket("ws://{{.}}/getInfo");
+
+        socket.onmessage = function(event) {
+            document.getElementById("process").textContent = event.data;
+        };
+    </script>
     <script>
         new Vue({
             el: '#app',
