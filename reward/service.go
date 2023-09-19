@@ -2,7 +2,6 @@ package reward
 
 import (
 	"fmt"
-	"github.com/Clov614/rewards-helper/reward/html"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -10,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"os/exec"
+	"rewards-helper/reward/html"
 	"runtime"
 	"sync"
 )
@@ -133,11 +133,6 @@ func (wu *WebUI) StartWebPage(wg *sync.WaitGroup) {
 			http.Error(w, "Error processing template", http.StatusInternalServerError)
 			return
 		}
-		// 设置Content-Type为text/html
-		w.Header().Set("Content-Type", "text/html")
-		// 将HTML文件内容写入ResponseWriter
-		// 组装模板数据
-
 		// 渲染模板并将结果写入ResponseWriter
 		err = tmpl.Execute(w, r.Host)
 		if err != nil {
@@ -147,7 +142,7 @@ func (wu *WebUI) StartWebPage(wg *sync.WaitGroup) {
 
 	})
 
-	http.HandleFunc("/output", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/getInfo", func(w http.ResponseWriter, r *http.Request) {
 		conn, err := upgrader.Upgrade(w, r, nil)
 		if err != nil {
 			fmt.Println("Error upgrading connection:", err)

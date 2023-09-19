@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/Clov614/rewards-helper/reward"
-	"github.com/Clov614/rewards-helper/reward/cmd"
 	"log"
 	"os"
+	"rewards-helper/reward"
+	"rewards-helper/reward/cmd"
 	"sync"
 	"time"
 )
@@ -63,7 +63,7 @@ func start(conn *reward.Conn) {
 		Conn:   conn,
 		UrlGet: reward.UrlGet(conn.Conf.SearchUrl),
 		//UaPc:   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.63",
-		UaPc: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
+		UaPc: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36",
 		UaMb: "Mozilla/5.0 (Linux; Android 11; PEAT00) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Mobile Safari/537.36 EdgA/110.0.1587.54",
 	}
 	// init任务管理器处理
