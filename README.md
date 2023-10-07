@@ -27,9 +27,11 @@
 ## 开始使用
 > windows平台 建议使用run.bat启动
 
-#### `start cmd /K rewards-helper.exe`
+> 第一次执行双击文件运行自动生成run.bat **(需要将其重命名为`rewards-helper`)**
 
-文本文件写入 `start cmd /K rewards-helper.exe` 后，改后缀.txt为.bat
+~~#### `start cmd /K rewards-helper.exe` **(rewards-helper.exe为可执行文件的名称具体文件名根据实际有所出入)**~~
+
+~~文本文件写入 `start cmd /K rewards-helper.exe` 后，改后缀.txt为.bat~~
 
 ### 1. [下载对应平台的可执行文件](https://github.com/Clov614/rewards-helper/releases/)
 
@@ -60,6 +62,8 @@
     <img src="source/img/start_step/2.png">
     <img src="source/img/start_step/3.png">
 </details>
+
+配置cookie失败请参考: [InvalidCookie.md](source/doc/InvalidCookie.md)
 
 ### 4. 重新运行程序
 
